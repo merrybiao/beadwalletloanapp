@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+    xsi:schemaLocation="
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+    http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo.xsd">
+    
+   <mongo:mongo-client id="mongo" host="${mongodb.host}" port="${mongodb.port}" credentials="${mongodb.credentials}" replica-set="${mongodb.replicaSet}">
+		<mongo:client-options 
+			connections-per-host="${mongodb.connectionsPerHost}" 
+			max-wait-time="${mongodb.maxWaitTime}"
+			socket-timeout="${mongodb.socketTimeout}"
+			connect-timeout="${mongodb.connectTimeout}"
+			socket-keep-alive="${mongodb.socketKeepAlive}"/>
+	</mongo:mongo-client>
+	
+    <mongo:db-factory id ="mongoDbFactory" dbname="${mongodb.dbname}" mongo-ref="mongo" />
+	
+	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+	    <constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />
+	    <constructor-arg name="mongoConverter" ref="mappingMongoConverter" />
+	</bean>
+      
+ 	<bean id="mappingMongoConverter"   
+	    class="com.waterelephant.mongo.converter.MyMappingMongoConverter">
+	    <constructor-arg name="dbRefResolver" ref ="dbRefResolver"/>
+	    <constructor-arg name="mappingContext" ref="mappingContext" />   
+	    <property name="typeMapper" ref="defaultMongoTypeMapper" />  
+	    <property name="listConverter" ref="listConverter"/> 
+ 	</bean>
+ 
+	<bean id="dbRefResolver" class="org.springframework.data.mongodb.core.convert.DefaultDbRefResolver">
+	  	<constructor-arg name="mongoDbFactory" ref ="mongoDbFactory"/>
+	</bean>  
+
+ 	<bean id="defaultMongoTypeMapper"   
+	    class="org.springframework.data.mongodb.core.convert.DefaultMongoTypeMapper">   
+	    <constructor-arg name="typeKey">
+	    	<null></null>
+	    </constructor-arg>
+ 	</bean>    
+ 
+	<bean id="mappingContext" class="org.springframework.data.mongodb.core.mapping.MongoMappingContext" />   
+	    
+	<bean id="listConverter" class="org.springframework.beans.factory.config.ListFactoryBean">
+		<property name="sourceList">
+	 		<list>
+	 			<value>com.waterelephant.bjsms.entity.BwDhstreportSms</value>
+	 		</list>
+	 	</property>
+	 </bean>
+</beans>
+
+

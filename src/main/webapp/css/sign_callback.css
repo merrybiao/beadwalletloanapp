@@ -1,0 +1,204 @@
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, textarea, p, blockquote, th, td {
+  margin: 0;
+  padding: 0;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+fieldset, img, abbr, acronym {
+  border: 0;
+}
+
+address, caption, cite, code, dfn, em, strong, th, var {
+  font-style: normal;
+  font-weight: normal;
+}
+
+ol, ul, li {
+  list-style: none;
+}
+
+caption, th {
+  text-align: left;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: normal;
+}
+
+input {
+  border: none 0;
+  -webkit-appearance: none;
+  outline: none;
+}
+
+i {
+  font-style: normal;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+}
+
+a, img {
+  -webkit-touch-callout: none;
+  text-decoration: none;
+}
+
+html, body {
+  line-height: 1;
+  height: 100%;
+  -webkit-user-select: none;
+  user-select: none;
+  font-family: "microsoft yahei",Verdana,Arial,Helvetica,sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -webkit-overflow-scrolling: touch;
+  overflow-scrolling: touch;
+  text-rendering: optimizelegibility;
+}
+
+select {
+  -webkit-appearance: none;
+}
+
+textarea {
+  -webkit-appearance: none;
+}
+
+img {
+  display: block;
+}
+
+::-webkit-scrollbar {
+  width: 0;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #fff;
+}
+
+.fcontent_wrapper {
+  min-height: 100%;
+  padding-top: 0.53333rem;
+}
+
+.fcontent_icon {
+  display: block;
+  width: 2.01333rem;
+  height: 2.01333rem;
+  margin: auto;
+  background: url(../images/sign_fail.png) 0 0 no-repeat;
+  background-size: 100% 100%;
+}
+
+.fp1 {
+  text-align: center;
+  font-size: 0.42667rem;
+  padding-top: 0.53333rem;
+  color: 434c4e;
+}
+
+.fp2 {
+  text-align: center;
+  padding-top: 0.53333rem;
+  color: #909090;
+  font-size: 0.37333rem;
+}
+
+.fp3 {
+  text-align: center;
+  padding: 0.53333rem 0.4rem;
+  line-height: 1.6;
+  font-size: 0.32rem;
+  color: #909090;
+}
+
+.fbtn_close {
+  width: 100%;
+}
+
+.fbtn_close span {
+  width: 8.93333rem;
+  height: 0.96rem;
+  background: #3f8dff;
+  text-align: center;
+  color: #fff;
+  display: block;
+  margin: auto;
+  font-size: 0.42667rem;
+  line-height: 0.96rem;
+}
+
+.scontent_wrapper {
+  min-height: 100%;
+  padding-top: 0.53333rem;
+}
+
+.scontent_icon {
+  display: block;
+  width: 2.08rem;
+  height: 2.01333rem;
+  margin: auto;
+  background: url(../images/sign_succ.png) 0 0 no-repeat;
+  background-size: 100% 100%;
+}
+
+.sp1 {
+  text-align: center;
+  font-size: 0.42667rem;
+  padding-top: 0.53333rem;
+  color: 434c4e;
+}
+
+.sp2 {
+  text-align: center;
+  padding-top: 0.53333rem;
+  color: #909090;
+  font-size: 0.37333rem;
+}
+
+.sbtn_close {
+  width: 100%;
+  margin-top: 0.53333rem;
+}
+
+.sbtn_close span {
+  width: 8.93333rem;
+  height: 0.96rem;
+  background: #3f8dff;
+  text-align: center;
+  color: #fff;
+  display: block;
+  margin: auto;
+  font-size: 0.42667rem;
+  line-height: 0.96rem;
+}
+
+/*iphone4/4s */
+/*iphone5 */
+/*iphone6 */
+/*iphone6 Plus */
+
+/*# sourceMappingURL=../maps/sign_callback.css.map */

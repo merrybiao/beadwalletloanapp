@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:task="http://www.springframework.org/schema/task"
+    xmlns:util="http://www.springframework.org/schema/util" xsi:schemaLocation="
+	http://www.springframework.org/schema/task
+	http://www.springframework.org/schema/task/spring-task-3.2.xsd
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.1.xsd">
+    <context:component-scan base-package="com.waterelephant">
+        <context:exclude-filter type="annotation"
+            expression="org.springframework.stereotype.Controller" />
+    </context:component-scan>
+
+    <!--开启AOP代理-->
+    <aop:aspectj-autoproxy />
+
+    <!-- 开启注解驱动 -->
+    <task:annotation-driven />
+
+    <!-- 加载配置文件
+        ignore-unresolvable设置为ture，后属性值无法解析成功，将赋值为${属性名}
+     -->
+    <context:property-placeholder location="classpath:*.properties"
+        ignore-unresolvable="true" />
+
+    <!-- <util:properties id="settings" location="classpath:system.properties"
+        /> -->
+
+    <!-- <context:component-scan base-package="com.waterelephant.job"></context:component-scan> -->
+
+    <!-- <import resource="spring-dubbo.xml"/> -->
+    <!-- <util:properties id="settings" location="classpath:system.properties"
+        /> -->
+
+    <!--加载数据源属性配置文件 -->
+    <bean id="propertyConfigurer"
+        class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:datasource.properties" />
+        <property name="ignoreUnresolvablePlaceholders" value="true" />
+    </bean>
+
+    <!-- 数据源使用alibaba druid连接池 -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init"
+        destroy-method="close">
+
+        <!--
+            数据库配置从【profiles.*】文件夹中得来，打包的时候使用maven命令即可生成对应的文件
+            1.maven打包命令：mvn clean package -Dmaven.test.skip=true -Pprod
+            备注：prod即对应的变量，可以换成其他的变量
+        -->
+
+        <property name="url" value="${jdbc.url}" />
+        <property name="username" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
+        <property name="filters" value="stat" />
+        <property name="maxActive" value="${jdbc.maxActive}" />
+        <property name="initialSize" value="${jdbc.initialSize}" />
+        <property name="maxWait" value="${jdbc.maxWait}" />
+        <property name="minIdle" value="${jdbc.minIdle}" />
+        <property name="timeBetweenEvictionRunsMillis" value="3000" />
+        <property name="minEvictableIdleTimeMillis" value="300000" />
+        <property name="poolPreparedStatements" value="true" />
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="20" />
+        <property name="testWhileIdle" value="true" />
+        <property name="validationQuery" value="select 1" />
+    </bean>
+
+
+	<!-- MyBatis 通用 Mapper4 -->
+	<bean class="tk.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.waterelephant.mapper,com.waterelephant.*.mapper,com.waterelephant.*.*.mapper" />
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+        <property name="properties">
+        	<value>
+	        	IDENTITY=MySQL
+	            notEmpty=true
+            </value>
+        </property>
+    </bean>
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dynamicDataSource" />
+        <property name="typeAliasesPackage" value="com.waterelephant.entity, com.waterelephant.*.entity" />
+        <property name="configLocation" value="classpath:mybatis-config.xml"></property>
+        <property name="mapperLocations" value="classpath*:/mybatis/**/*.xml" />
+        <property name="plugins">
+            <array>
+                <bean class="com.github.pagehelper.PageHelper">
+                    <property name="properties">
+                        <value>
+                            dialect=mysql
+                            reasonable=true
+                        </value>
+                    </property>
+                </bean>
+            </array>
+        </property>
+    </bean>
+
+    <!-- 配置事务管理器 -->
+    <bean id="transactionManager"
+        class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dynamicDataSource" />
+    </bean>
+
+    <!-- sqlMapper 实现自定义SQL执行 -->
+    <bean id="sqlMapper" class="com.waterelephant.utils.SqlMapper" scope="prototype">
+        <constructor-arg ref="sqlSession" />
+    </bean>
+
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" scope="prototype">
+        <constructor-arg index="0" ref="sqlSessionFactory" />
+    </bean>
+
+    <!-- 配置事务的传播特性 -->
+    <tx:advice id="txAdvice">
+        <tx:attributes>
+            <!--以save、delete、update字母开的的方法设置事务 -->
+            <tx:method name="insert*" propagation="REQUIRED" rollback-for="Exception" />
+            <tx:method name="add*" propagation="REQUIRED" rollback-for="Exception" />
+            <tx:method name="save*" propagation="REQUIRED" rollback-for="Exception" />
+            <tx:method name="update*" propagation="REQUIRED" rollback-for="Exception" />
+            <tx:method name="del*" propagation="REQUIRED" rollback-for="Exception" />
+            <tx:method name="bulk*" propagation="REQUIRED" rollback-for="Exception" />
+            <tx:method name="check*" propagation="REQUIRED" rollback-for="Exception" />
+            <tx:method name="reject*" propagation="REQUIRED" rollback-for="Exception" />
+            <!--其他方法事务只读，提高性能 -->
+            <tx:method name="*" propagation="REQUIRED" read-only="true" />
+        </tx:attributes>
+    </tx:advice>
+    <!-- 配置事务注解-->
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" order="1"/>
+    <!--配置参与事务的方法 -->
+    <aop:config>
+        <aop:pointcut id="businessLogicServices"
+            expression="execution(* com.waterelephant.*.service..*.*(..)) || execution(* com.waterelephant.service..*.*(..))" />
+        <aop:advisor pointcut-ref="businessLogicServices" advice-ref="txAdvice" />
+    </aop:config>
+
+    <!--文件上传 -->
+    <bean id="multipartResolver"
+        class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="1000000000" />
+        <property name="defaultEncoding">
+            <value>UTF-8</value>
+        </property>
+    </bean>
+
+    <!--线程池 -->
+    <bean id="taskExecutor"
+        class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="corePoolSize" value="5" />
+        <property name="keepAliveSeconds" value="300" />
+        <property name="maxPoolSize" value="30" />
+        <property name="queueCapacity" value="30" />
+        <property name="WaitForTasksToCompleteOnShutdown" value="true" />
+    </bean>
+
+    
+    <bean id="sxfqDataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		  init-method="init" destroy-method="close">
+		<property name="url" value="${sxfq.jdbc.url}" />
+		<property name="username" value="${sxfq.jdbc.username}" />
+		<property name="password" value="${sxfq.jdbc.password}" />
+		<property name="filters" value="stat" />
+		<property name="maxActive" value="${sxfq.jdbc.maxActive}" />
+		<property name="initialSize" value="${sxfq.jdbc.initialSize}" />
+		<property name="maxWait" value="${sxfq.jdbc.maxWait}" />
+		<property name="minIdle" value="${sxfq.jdbc.minIdle}" />
+		<property name="timeBetweenEvictionRunsMillis" value="3000" />
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+		<property name="poolPreparedStatements" value="true" />
+		<property name="maxPoolPreparedStatementPerConnectionSize"
+				  value="20" />
+		<property name="testWhileIdle" value="true" />
+		<property name="validationQuery" value="select 1" />
+	</bean>
+
+	<bean id="dynamicDataSource" class="com.waterelephant.dataSource.DynamicDataSource">
+		<!-- 通过key-value的形式来关联数据源 -->
+		<property name="targetDataSources">
+			<map key-type="com.waterelephant.dataSource.DataSource">
+				<entry key="MASTER" value-ref="dataSource" />
+				<entry key="MASTER_NEW"   value-ref="sxfqDataSource"/>
+			</map>
+		</property>
+		<property name="defaultTargetDataSource" ref="sxfqDataSource" >
+		</property>
+	</bean>
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+    
+</beans>

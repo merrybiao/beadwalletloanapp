@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.waterelephant.mapper.BwOrderRepaymentBatchDetailMapper" >
+  <resultMap id="BaseResultMap" type="com.waterelephant.entity.BwOrderRepaymentBatchDetail" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="order_id" property="orderId" jdbcType="BIGINT" />
+    <result column="number" property="number" jdbcType="INTEGER" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="residual_amount" property="residualAmount" jdbcType="DECIMAL" />
+    <result column="total_amount" property="totalAmount" jdbcType="DECIMAL" />
+    <result column="overdue_amount" property="overdueAmount" jdbcType="DECIMAL" />
+    <result column="overdue_day" property="overdueDay" jdbcType="INTEGER" />
+    <result column="repayment_channel" property="repaymentChannel" jdbcType="INTEGER" />
+    <result column="last_repayment" property="lastRepayment" jdbcType="BIT" />
+    <result column="terminal_type" property="terminalType" jdbcType="TINYINT" />
+    <result column="trade_time" property="tradeTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    id, order_id, number, amount, residual_amount, total_amount, overdue_amount, overdue_day, 
+    repayment_channel, last_repayment, terminal_type, trade_time, create_time, update_time
+  </sql>
+
+  <select id="getRepaymentBatch" parameterType="java.lang.Long" resultType="com.waterelephant.dto.RepaymentBatch" >
+  	select IFNULL(sum(amount),'0.00') alreadyTotalBatchMoney,max(number) totalNumber,IFNULL(max(number),0)+1 currentNumber from bw_order_repayment_batch_detail where order_id=#{orderId}
+  </select>
+
+  <select id="getBatchDetailTotal" parameterType="java.lang.Long" resultType="java.lang.Double" >
+  	select IFNULL(sum(amount),'0.00') batchTotal  from bw_order_repayment_batch_detail where order_id=#{orderId}
+  </select>
+
+  <select id="selectHasRepaymentMoney" parameterType="long" resultType="java.lang.Double">
+    select IFNULL(sum(already_repay_money),'0.00') alreadyTotalBatchMoney from bw_repayment_plan
+    where order_id=#{orderId} and repay_status &lt;&gt; 4
+  </select>
+
+  <select id="getRepaymentBatchDetailList" parameterType="java.lang.Long"  resultType="com.waterelephant.dto.RepaymentBatchDetail" >
+  	select number,IFNULL(amount,'0.00') amount,date_format(trade_time,'%Y-%m-%d') tradeTime,residualAmount from bw_order_repayment_batch_detail where order_id=#{orderId}
+  	order by number asc
+  </select>
+</mapper>
