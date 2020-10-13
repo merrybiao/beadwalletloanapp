@@ -35,7 +35,7 @@
         <guava.version>18.0</guava.version>
         <joda-time.version>2.8.1</joda-time.version>
         <httpclient.version>4.5</httpclient.version>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
         <assertj.version>1.7.1</assertj.version>
         <druid.version>1.0.15</druid.version>
         <mysql.version>5.1.36</mysql.version>
