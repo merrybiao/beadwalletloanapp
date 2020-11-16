@@ -49,7 +49,7 @@
         <elasticsearch.version>2.4.1</elasticsearch.version>
         <spring-data-elasticsearch.version>2.0.4.RELEASE</spring-data-elasticsearch.version>
         <okhttp.version>3.6.0</okhttp.version>
-        <xstream.version>1.4.2</xstream.version>
+        <xstream.version>1.4.13-java7</xstream.version>
         <servlet-api.version>2.5</servlet-api.version>
         <json-lib.version>2.4</json-lib.version>
         <mail.version>1.4.1</mail.version>
