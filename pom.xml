@@ -56,7 +56,7 @@
         <commons-pool.version>1.6</commons-pool.version>
         <freemarker.version>2.3.25-incubating</freemarker.version>
         <aliyun-sdk-oss.version>3.4.0</aliyun-sdk-oss.version>
-        <poi.version>3.14</poi.version>
+        <poi.version>4.1.2</poi.version>
         <rocketmq.version>3.2.6</rocketmq.version>
         <mongo-java-driver.version>3.0.0</mongo-java-driver.version>
         <thumbnailator.version>0.4.8</thumbnailator.version>
