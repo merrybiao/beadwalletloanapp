@@ -29,7 +29,7 @@
         <log4j.version>1.2.17</log4j.version>
         <aspectj.version>1.8.6</aspectj.version>
         <commons-lang3.version>3.4</commons-lang3.version>
-        <commons-io.version>2.4</commons-io.version>
+        <commons-io.version>2.7</commons-io.version>
         <commons-codec.version>1.10</commons-codec.version>
         <commons-compress.version>1.9</commons-compress.version>
         <guava.version>18.0</guava.version>
