@@ -34,7 +34,7 @@
         <commons-compress.version>1.9</commons-compress.version>
         <guava.version>18.0</guava.version>
         <joda-time.version>2.8.1</joda-time.version>
-        <httpclient.version>4.5</httpclient.version>
+        <httpclient.version>4.5.13</httpclient.version>
         <junit.version>4.12</junit.version>
         <assertj.version>1.7.1</assertj.version>
         <druid.version>1.0.15</druid.version>
