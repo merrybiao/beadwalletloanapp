@@ -63,7 +63,7 @@
         <bcprov-ext-jdk16.version>1.45</bcprov-ext-jdk16.version>
         <hibernate-validator.version>5.2.4.Final</hibernate-validator.version>
         <javax.el.version>2.2.4</javax.el.version>
-        <dubbo.version>2.5.3</dubbo.version>
+        <dubbo.version>2.6.9</dubbo.version>
         <jsp-api.version>2.0</jsp-api.version>
         <json.version>20151123</json.version>
         <fastjson.version>1.2.47</fastjson.version>
